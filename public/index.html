@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Welcome to Firebase Hosting</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- update the version number as needed -->
+  <script defer src="/__/firebase/10.12.2/firebase-app-compat.js"></script>
+  <!-- include only the Firebase features as you need -->
+  <script defer src="/__/firebase/10.12.2/firebase-auth-compat.js"></script>
+  <script defer src="/__/firebase/10.12.2/firebase-database-compat.js"></script>
+  <script defer src="/__/firebase/10.12.2/firebase-firestore-compat.js"></script>
+  <script defer src="/__/firebase/10.12.2/firebase-functions-compat.js"></script>
+  <script defer src="/__/firebase/10.12.2/firebase-messaging-compat.js"></script>
+  <script defer src="/__/firebase/10.12.2/firebase-storage-compat.js"></script>
+  <script defer src="/__/firebase/10.12.2/firebase-analytics-compat.js"></script>
+  <script defer src="/__/firebase/10.12.2/firebase-remote-config-compat.js"></script>
+  <script defer src="/__/firebase/10.12.2/firebase-performance-compat.js"></script>
+  <!-- 
+      initialize the SDK after all desired features are loaded, set useEmulator to false
+      to avoid connecting the SDK to running emulators.
+    -->
+  <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+
+  <style media="screen">
+    body {
+      background: #ECEFF1;
+      color: rgba(0, 0, 0, 0.87);
+      font-family: Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    #message {
+      background: white;
+      max-width: 360px;
+      margin: 100px auto 16px;
+      padding: 32px 24px;
+      border-radius: 3px;
+    }
+
+    #message h2 {
+      color: #ffa100;
+      font-weight: bold;
+      font-size: 16px;
+      margin: 0 0 8px;
+    }
+
+    #message h1 {
+      font-size: 22px;
+      font-weight: 300;
+      color: rgba(0, 0, 0, 0.6);
+      margin: 0 0 16px;
+    }
+
+    #message p {
+      line-height: 140%;
+      margin: 16px 0 24px;
+      font-size: 14px;
+    }
+
+    #message a {
+      display: block;
+      text-align: center;
+      background: #039be5;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: white;
+      padding: 16px;
+      border-radius: 4px;
+    }
+
+    #message,
+    #message a {
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    }
+
+    #load {
+      color: rgba(0, 0, 0, 0.4);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+
+      body,
+      #message {
+        margin-top: 0;
+        background: white;
+        box-shadow: none;
+      }
+
+      body {
+        border-top: 16px solid #ffa100;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <section id="unlogged-section">
+    <div class="container">
+      <h2 class="text-center">Login Form</h2>
+      <form id="login-form" class="mb-3">
+        <div class="mb-3">
+          <label for="email" class="form-label">Email:</label>
+          <input type="email" id="email" name="email" class="form-control">
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password:</label>
+          <input type="password" id="password" name="password" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+        <!-- <button type="button" id="signup" class="btn btn-secondary">Sign Up</button> -->
+      </form>
+    </div>
+  </section>
+
+  <section id="logged-section">
+    <div class="container">
+      <h2 class="mt-5">Add Data</h2>
+      <form id="add-data-form" class="mb-3">
+        <div class="mb-3">
+          <input type="text" id="new-data" name="new-data" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Add Data</button>
+      </form>
+
+      <h2 class="mt-5">Data List</h2>
+      <ul id="data-list" class="list-group">
+        <!-- List items will be added here -->
+      </ul>
+    </div>
+  </section>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const loadEl = document.querySelector('#load');
+
+
+
+      // // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+      // // // The Firebase SDK is initialized and available here!
+      // //
+      // // firebase.auth().onAuthStateChanged(user => { });
+      // database.ref('/path/to/ref').on('value', snapshot => { });
+      // // firebase.firestore().doc('/foo/bar').get().then(() => { });
+      // // firebase.functions().httpsCallable('yourFunction')().then(() => { });
+      // // firebase.messaging().requestPermission().then(() => { });
+      // // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+      // // firebase.analytics(); // call to activate
+      // // firebase.analytics().logEvent('tutorial_completed');
+      // // firebase.performance(); // call to activate
+      // //
+      // // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
+
+      // database.ref('/path/to/ref').on('value', snapshot => { 
+
+      //   console.log(snapshot.val());
+      // });
+
+      // try {
+      //   let app = firebase.app();
+      //   let features = [
+      //     'auth', 
+      //     'database', 
+      //     'firestore',
+      //     'functions',
+      //     'messaging', 
+      //     'storage', 
+      //     'analytics', 
+      //     'remoteConfig',
+      //     'performance',
+      //   ].filter(feature => typeof app[feature] === 'function');
+      //   loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
+      // } catch (e) {
+      //   console.error(e);
+      //   loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
+      // }
+
+
+
+      const database = firebase.database();
+
+      const loginForm = document.getElementById('login-form');
+      const signupButton = document.getElementById('signup');
+
+      firebase.auth().signOut()
+      //Sign-o
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          document.getElementById('unlogged-section').style.display = 'none';
+          document.getElementById('logged-section').style.display = 'block';
+          readData()
+        } else {
+          document.getElementById('unlogged-section').style.display = 'block';
+          document.getElementById('logged-section').style.display = 'none';
+        }
+      });
+
+
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+
+        const email = loginForm.email.value;
+        const password = loginForm.password.value;
+
+        firebase.auth().signInWithEmailAndPassword(email, password)
+          .then((userCredential) => {
+            console.log('User:', userCredential.user);
+            const UID = userCredential.user.uid;
+            console.log('UID:', UID);
+            database.ref("users/" + UID).set({
+              displayName: userCredential.user.displayName,
+              email: userCredential.user.email,
+              phoneNumber: userCredential.user.phoneNumber,
+              photoURL: userCredential.user.photoURL,
+              providerData: userCredential.user.providerData,
+              providerId: userCredential.user.providerId,
+              uid: userCredential.user.uid,
+              horario: new Date().toLocaleString()
+            });
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+      });
+
+      // signupButton.addEventListener('click', () => {
+      //     const email = loginForm.email.value;
+      //     const password = loginForm.password.value;
+
+      //     firebase.auth().createUserWithEmailAndPassword(email, password)
+      //         .then((userCredential) => {
+      //             // Signed in 
+      //             var user = userCredential.user;
+      //             console.log('Registered:', user);
+      //         })
+      //         .catch((error) => {
+      //             console.error('Error:', error);
+      //         });
+      // });
+
+
+
+      
+      const addDataForm = document.getElementById('add-data-form');
+
+      // Get a reference to the database service
+
+
+      // Reference to your data
+
+      var ref = database.ref('your-data-path');
+
+     // readData();
+
+      // Add new data to the list
+      addDataForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const newData = addDataForm['new-data'].value;
+        ref.push(newData);
+        addDataForm['new-data'].value = '';
+      });
+    });
+
+    function readData() {
+      const dataList = document.getElementById('data-list');
+      const database = firebase.database();
+      var ref = database.ref('your-data-path');
+
+      // Listen for changes and update the list
+      ref.on('value', (snapshot) => {
+        const data = snapshot.val();
+        dataList.innerHTML = '';
+        for (let key in data) {
+          let li = document.createElement('li');
+          li.textContent = data[key];
+          li.className = 'list-group-item d-flex justify-content-between align-items-center';
+
+          let deleteButton = document.createElement('button');
+          deleteButton.textContent = 'Delete';
+          deleteButton.className = 'btn btn-danger';
+          deleteButton.addEventListener('click', () => {
+            ref.child(key).remove();
+          });
+
+          li.appendChild(deleteButton);
+          dataList.appendChild(li);
+        }
+      });
+
+    }
+  </script>
+</body>
+
+</html>
